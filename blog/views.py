@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required,permission_required
 from django.shortcuts import get_object_or_404 , redirect, render
 from django.forms import formset_factory
 from . import forms, models
+from django.db.models import Q
 
 
 login_required
@@ -99,10 +100,15 @@ def edit_blog(request, blog_id):
 
 @login_required
 def home(request):
-    photos = models.Photo.objects.all()
-    blogs = models.Blog.objects.all()
-    return render(request, 'blog/home.html', context={'photos': photos, 'blogs': blogs})
-
+    blogs = models.Blog.objects.filter(Q(contributors__in=request.user.follows.all())| Q(starred=True))
+    photos = models.Photo.objects.filter(
+        uploader__in=request.user.follows.all()).exclude(
+            blog__in=blogs
+    )
+    context = {'blogs': blogs,
+               'photos': photos,
+               }
+    return render( request, 'blog/home.html', context=context)
 
 @login_required
 def view_blog(request, blog_id):
