@@ -116,6 +116,15 @@ def home(request):
                }
     return render( request, 'blog/home.html', context=context)
 
+
+def photo_feed(request):
+        photos = models.Photo.Objects.filter(
+            uploader__in=request.user.follows.all()).order_by('-date_created')
+        context = {
+            'photos':photos,
+        }
+        return render(request, 'blog/photo_feed.html', context=context)
+
 @login_required
 def view_blog(request, blog_id):
     blog = get_object_or_404(models.Blog, id=blog_id)
