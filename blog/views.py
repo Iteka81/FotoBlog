@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404 , redirect, render
 from django.forms import formset_factory
 from . import forms, models
 from django.db.models import Q
+from itertools import chain
 
 
 login_required
@@ -105,8 +106,13 @@ def home(request):
         uploader__in=request.user.follows.all()).exclude(
             blog__in=blogs
     )
-    context = {'blogs': blogs,
-               'photos': photos,
+    blogs_and_photos = sorted(
+        chain(blogs, photos),
+        key= lambda instance : instance.date_created,
+        reverse=True
+    )
+    context = {
+        'blogs_and_photos': blogs_and_photos,
                }
     return render( request, 'blog/home.html', context=context)
 
