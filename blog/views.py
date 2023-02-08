@@ -108,7 +108,7 @@ def home(request):
     )
     blogs_and_photos = sorted(
         chain(blogs, photos),
-        key= lambda instance : instance.date_created,
+        key=lambda instance: instance.date_created,
         reverse=True
     )
     context = {
