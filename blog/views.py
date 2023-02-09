@@ -1,4 +1,4 @@
-
+from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required,permission_required
 from django.shortcuts import get_object_or_404 , redirect, render
 from django.forms import formset_factory
@@ -111,18 +111,24 @@ def home(request):
         key=lambda instance: instance.date_created,
         reverse=True
     )
+
+    paginator = Paginator(blogs_and_photos,4)
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     context = {
-        'blogs_and_photos': blogs_and_photos,
+        'page_obj': page_obj,
                }
     return render( request, 'blog/home.html', context=context)
 
 
 def photo_feed(request):
-        photos = models.Photo.Objects.filter(
+        photos = models.Photo.objects.filter(
             uploader__in=request.user.follows.all()).order_by('-date_created')
-        context = {
-            'photos':photos,
-        }
+        paginator = Paginator(photos, 2)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        context = {'page_obj': page_obj}
         return render(request, 'blog/photo_feed.html', context=context)
 
 @login_required
