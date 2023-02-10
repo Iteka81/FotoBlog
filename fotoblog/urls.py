@@ -24,18 +24,17 @@ urlpatterns = [
         template_name='authentication/password_change_done.html'),
          name='password_change_done'
          ),
-    path('signup/', authentication.views.signup_page, name='signup'),
-    path('profile-photo/upload', authentication.views.upload_profile_photo,
+    path('signup/', authentication.views.Signup_page.as_view(), name='signup'),
+    path('profile-photo/upload', authentication.views.Upload_profile_photo.as_view(),
          name='upload_profile_photo'),
-    path('home/', blog.views.home, name='home'),
-    path('photo/upload/', blog.views.photo_upload, name='photo_upload'),
-    path('photo/feed/', blog.views.photo_feed, name='photo_feed'),
-    path('blog/create', blog.views.blog_and_photo_upload, name='blog_create'),
-    path('blog/<int:blog_id>' , blog.views.view_blog, name='view_blog'),
-    path('blog/<int:blog_id>/edit', blog.views.edit_blog, name='edit_blog'),
-    path('photo/upload-multiple/', blog.views.create_multiple_photos,
-         name='create_multiple_photos'),
-path('follow-users/', blog.views.follow_users, name='follow_users')
+    path('home/', blog.views.Home.as_view(), name='home'),
+    path('photo/upload/', blog.views.PhotoUpload.as_view(), name='photo_upload'),
+    path('photo/feed/', blog.views.PhotoFeed.as_view, name='photo_feed'),
+    path('blog/create', blog.views.Blog_and_photo_upload.as_view(), name='blog_create'),
+    path('blog/<int:blog_id>' , blog.views.View_blog.as_view(), name='view_blog'),
+    path('blog/<int:blog_id>/edit', blog.views.Edit_Blog.as_view(), name='edit_blog'),
+    path('photo/upload-multiple/', blog.views.create_multiple_photos, name='create_multiple_photos'),
+    path('follow-users/', blog.views.FollowUsers.as_view(), name='follow_users')
 ]
 
 if settings.DEBUG:
